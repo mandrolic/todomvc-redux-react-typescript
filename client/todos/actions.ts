@@ -1,46 +1,36 @@
-import { createAction, Action } from 'redux-actions';
-import { assign } from 'lodash';
+import  { 
+  Todo,
+  NewTodoAction, 
+  DeleteTodoAction, 
+  EditTodoAction, 
+  CompleteTodoAction, 
+  CompleteAllTodoAction, 
+  ClearCompleteTodoAction }  
+from './model';
 
-import { Todo } from './model';
+const addTodo : ((t: string) => NewTodoAction) = (text: string) => {
+  return { type: "ADD_TODO", payload: text};
+} 
 
-import {
-  ADD_TODO,
-  DELETE_TODO,
-  EDIT_TODO,
-  COMPLETE_TODO,
-  COMPLETE_ALL,
-  CLEAR_COMPLETED
-} from './constants/ActionTypes';
+const deleteTodo : ((t: Todo) => DeleteTodoAction) = (todo: Todo) => {
+  return { type: "DELETE_TODO", payload: todo };
+}
 
-const addTodo = createAction<Todo, string>(
-  ADD_TODO,
-  (text: string) => ({ text, completed: false })
-);
+const editTodo : ((t: Todo, s: string) => EditTodoAction) = (todo: Todo, newText: string) => {
+  return { type: "EDIT_TODO", payload: {...todo, text : newText }};
+}
 
-const deleteTodo = createAction<Todo, Todo>(
-  DELETE_TODO,
-  (todo: Todo) => todo
-);
+const completeTodo : ((t: Todo) => CompleteTodoAction) = (todo: Todo) => {
+  return { type: "COMPLETE_TODO", payload: todo };
+}
 
-const editTodo = createAction<Todo, Todo, string>(
-  EDIT_TODO,
-  (todo: Todo, newText: string) => <Todo>assign(todo, { text: newText })
-);
+const completeAll : () => CompleteAllTodoAction = () => {
+  return { type: "COMPLETE_ALL" };
+}
 
-const completeTodo = createAction<Todo, Todo>(
-  COMPLETE_TODO,
-  (todo: Todo) => todo
-)
-
-const completeAll = createAction<void>(
-  COMPLETE_ALL,
-  () => { }
-)
-
-const clearCompleted = createAction<void>(
-  CLEAR_COMPLETED,
-  () => { }
-);
+const clearCompleted : () => ClearCompleteTodoAction = () => {
+  return { type: "CLEAR_COMPLETED" };
+}
 
 export {
   addTodo,

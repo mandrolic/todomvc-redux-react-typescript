@@ -1,61 +1,45 @@
-import { assign } from 'lodash';
-import { handleActions, Action } from 'redux-actions';
+import { Reducer } from 'redux';
+import { TodoAction, IState } from './model';
 
-import { Todo, IState } from './model';
-import {
-  ADD_TODO,
-  DELETE_TODO,
-  EDIT_TODO,
-  COMPLETE_TODO,
-  COMPLETE_ALL,
-  CLEAR_COMPLETED
-} from './constants/ActionTypes';
-
-const initialState: IState = [<Todo>{
+const initialState = [{
   text: 'Use Redux with TypeScript',
   completed: false,
   id: 0
 }];
 
-export default handleActions<IState, Todo>({
-  [ADD_TODO]: (state: IState, action: Action<Todo>): IState => {
-    return [{
-      id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-      completed: action.payload.completed,
-      text: action.payload.text
-    }, ...state];
-  },
-
-  [DELETE_TODO]: (state: IState, action: Action<Todo>): IState => {
-    return state.filter(todo =>
-      todo.id !== action.payload.id
-    );
-  },
-
-  [EDIT_TODO]: (state: IState, action: Action<Todo>): IState => {
-    return <IState>state.map(todo =>
-      todo.id === action.payload.id
-        ? assign(<Todo>{}, todo, { text: action.payload.text })
-        : todo
-    );
-  },
-
-  [COMPLETE_TODO]: (state: IState, action: Action<Todo>): IState => {
-    return <IState>state.map(todo =>
-      todo.id === action.payload.id ?
-        assign({}, todo, { completed: !todo.completed }) :
-        todo
-    );
-  },
-
-  [COMPLETE_ALL]: (state: IState, action: Action<Todo>): IState => {
-    const areAllMarked = state.every(todo => todo.completed);
-    return <IState>state.map(todo => assign({}, todo, {
-      completed: !areAllMarked
-    }));
-  },
-
-  [CLEAR_COMPLETED]: (state: IState, action: Action<Todo>): IState => {
-    return state.filter(todo => todo.completed === false);
+let todoReducer : Reducer<IState> = (state : IState | undefined, action : TodoAction)  => { 
+  
+  // Redux will call once initially with undefined state when reducer is combined() with others
+  if (state == undefined) { 
+    return initialState;
   }
-}, initialState);
+
+  switch (action.type) {
+
+    case 'ADD_TODO':
+      const newId = state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1;
+      return [ { text: action.payload,  id: newId, completed: false },  ...state];
+  
+    case 'DELETE_TODO':
+      const todoToDelete = action.payload;
+      return state.filter(todo =>  todo.id !== todoToDelete.id);
+    
+    case 'EDIT_TODO':
+      const todoToEdit = action.payload;
+      return state.map(todo => todo.id === todoToEdit.id ? { ...todo, text: todoToEdit.text } : todo);
+    
+    case 'COMPLETE_TODO':
+      const todoToComplete = action.payload;
+      return state.map(todo => todo.id === todoToComplete.id ? { ...todo, completed: !todo.completed} : todo);
+
+    case 'COMPLETE_ALL':
+      const areAllMarked = state.every(todo => todo.completed);
+      return state.map(todo => ({ ...todo, completed: !areAllMarked }));
+    
+    case 'CLEAR_COMPLETED':
+      return state.filter(todo => !todo.completed);
+    }
+
+}  
+
+export default todoReducer;

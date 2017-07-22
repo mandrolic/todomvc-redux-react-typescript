@@ -3,25 +3,18 @@
 import { expect } from 'chai';
 
 import reducer from '../reducer';
-import { Todo } from '../model';
-
-import {
-  ADD_TODO,
-  DELETE_TODO,
-  EDIT_TODO,
-  COMPLETE_TODO,
-  COMPLETE_ALL,
-  CLEAR_COMPLETED
-} from '../constants/ActionTypes';
+import { Todo, NewTodoAction } from '../model';
 
 describe('todo reducer', () => {
   it('handles add', () => {
     let state: Todo[] = [{ id: 0, text: '', completed: true }];
 
-    state = reducer(state, {
-      type: ADD_TODO,
-      payload: { text: 'hello', completed: false }
-    });
+    let action : NewTodoAction = {
+      type: "ADD_TODO",
+      payload:  "hello"
+    };
+
+    state = reducer(state, action);
 
     expect(state[0]).to.eql(
       { id: 1, text: 'hello', completed: false }
@@ -32,7 +25,7 @@ describe('todo reducer', () => {
     let state: Todo[] = [{ id: 1, text: '', completed: false }];
 
     state = reducer(state, {
-      type: DELETE_TODO,
+      type: "DELETE_TODO",
       payload: { id: 1 } as Todo
     });
 
@@ -43,7 +36,7 @@ describe('todo reducer', () => {
     let state: Todo[] = [{ id: 1, text: '', completed: false }];
 
     state = reducer(state, {
-      type: EDIT_TODO,
+      type: "EDIT_TODO",
       payload: { id: 1, text: 'hello' } as Todo
     });
 
@@ -59,7 +52,7 @@ describe('todo reducer', () => {
     ];
 
     state = reducer(state, {
-      type: COMPLETE_TODO,
+      type: "COMPLETE_TODO",
       payload: { id: 1 } as Todo
     });
 
@@ -76,7 +69,7 @@ describe('todo reducer', () => {
     ];
 
     state = reducer(state, {
-      type: COMPLETE_ALL,
+      type: "COMPLETE_ALL",
       payload: {} as Todo
     });
 
@@ -87,7 +80,7 @@ describe('todo reducer', () => {
     ]);
 
     state = reducer(state, {
-      type: COMPLETE_ALL,
+      type: "COMPLETE_ALL",
       payload: {} as Todo
     });
 
@@ -105,7 +98,7 @@ describe('todo reducer', () => {
     ];
 
     state = reducer(state, {
-      type: CLEAR_COMPLETED,
+      type: "CLEAR_COMPLETED",
       payload: {} as Todo
     });
 

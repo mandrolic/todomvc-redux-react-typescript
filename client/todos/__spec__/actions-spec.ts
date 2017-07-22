@@ -6,9 +6,10 @@ import * as actions from '../actions';
 
 describe('actions', () => {
   it('creates new todo', () => {
-    const { payload: todo } = actions.addTodo('hello');
-
-    expect(todo.text).to.eql('hello');
+    
+    const { payload: text } = actions.addTodo('hello');;
+  
+    expect(text).to.eql('hello');
   });
 
   it('deletes todo', () => {
@@ -18,7 +19,7 @@ describe('actions', () => {
       completed: false
     });
 
-    expect(todo.id).to.eql(999);
+    expect(todo!.id).to.eql(999);
   });
 
   it('edits todo', () => {
@@ -37,6 +38,6 @@ describe('actions', () => {
       completed: false
     });
 
-    expect(todo.id).to.eql(999);
+    expect(todo!.id).to.eql(999);
   });
 });
