@@ -9,8 +9,8 @@ import {
   SHOW_ACTIVE
 } from '../constants/TodoFilters';
 
-const TODO_FILTERS = {
-  [SHOW_ALL]: () => true,
+const TODO_FILTERS : { [x: string] : (t: Todo) => boolean } = {
+  [SHOW_ALL]: _ => true,
   [SHOW_ACTIVE]: todo => !todo.completed,
   [SHOW_COMPLETED]: todo => todo.completed
 };
@@ -28,7 +28,7 @@ interface MainSectionState {
 };
 
 class MainSection extends React.Component<MainSectionProps, MainSectionState> {
-  constructor(props, context) {
+  constructor(props : MainSectionProps, context : MainSectionState) {
     super(props, context);
     this.state = { filter: SHOW_ALL };
   }
@@ -40,11 +40,11 @@ class MainSection extends React.Component<MainSectionProps, MainSectionState> {
     }
   }
 
-  handleShow(filter) {
+  handleShow(filter: string) {
     this.setState({ filter });
   }
 
-  renderToggleAll(completedCount) {
+  renderToggleAll(completedCount: number) {
     const { todos, completeAll } = this.props;
     if (todos.length > 0) {
       return (
@@ -56,7 +56,7 @@ class MainSection extends React.Component<MainSectionProps, MainSectionState> {
     }
   }
 
-  renderFooter(completedCount) {
+  renderFooter(completedCount: number) {
     const { todos } = this.props;
     const { filter } = this.state;
     const activeCount = todos.length - completedCount;

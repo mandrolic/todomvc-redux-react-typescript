@@ -34,7 +34,7 @@ class Footer extends React.Component<FooterProps, void> {
     );
   }
 
-  renderFilterLink(filter) {
+  renderFilterLink(filter: string) {
     const title = FILTER_TITLES[filter];
     const { filter: selectedFilter, onShow } = this.props;
 

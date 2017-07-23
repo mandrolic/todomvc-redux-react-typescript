@@ -38,7 +38,7 @@ class App extends React.Component<AppProps, void> {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state : {todos: any}) => ({
   todos: state.todos
 });
 
